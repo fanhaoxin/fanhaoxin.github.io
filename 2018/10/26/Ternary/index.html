@@ -79,17 +79,38 @@
 
 
 
-<meta name="description" content="“SYQ: Learning Symmetric Quantization For Efficient Deep Neural Networks”这篇文章提出了基于梯度的对称量化（SYQ: Learning Symmetric Quantization）方法，可以设计高效率的二值化或三值化深度网络(1-bit或2-bit权重量化)，并在pixel-wise、row-wise或者layer-wise">
+<meta name="description" content="概述就目前而言，深度神经网络的层数和训练时间变得越来越多。一方面，人们想要在处理器上面下功夫，但是处理器的处理速度也十分有限。造成目前一个比较深的神经网络的训练时间有时候往往需要一到两周，基于目前的困难，就有人提出了解决方式。 首先，在神经网络训练的整个训练过程中，最占用时间的无疑是乘法操作。是浮点型数据的乘法尤其消耗计算量，往往需要很多个Clock。那么，如果把所有全连接的权值全部变成1，或者-">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Learning Symmetric Quantization">
-<meta property="og:url" content="https://fanhaoxin.github.io/2018/10/26/SYQ/index.html">
+<meta property="og:title" content="三值神经网络">
+<meta property="og:url" content="https://fanhaoxin.github.io/2018/10/26/Ternary/index.html">
 <meta property="og:site_name" content="学沫要努力毕业！">
-<meta property="og:description" content="“SYQ: Learning Symmetric Quantization For Efficient Deep Neural Networks”这篇文章提出了基于梯度的对称量化（SYQ: Learning Symmetric Quantization）方法，可以设计高效率的二值化或三值化深度网络(1-bit或2-bit权重量化)，并在pixel-wise、row-wise或者layer-wise">
+<meta property="og:description" content="概述就目前而言，深度神经网络的层数和训练时间变得越来越多。一方面，人们想要在处理器上面下功夫，但是处理器的处理速度也十分有限。造成目前一个比较深的神经网络的训练时间有时候往往需要一到两周，基于目前的困难，就有人提出了解决方式。 首先，在神经网络训练的整个训练过程中，最占用时间的无疑是乘法操作。是浮点型数据的乘法尤其消耗计算量，往往需要很多个Clock。那么，如果把所有全连接的权值全部变成1，或者-">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2018-10-26T03:36:57.329Z">
+<meta property="og:image" content="f:/blog/source/img/ternary_001.png">
+<meta property="og:image" content="f:/blog/source/img/ternary_002.png">
+<meta property="og:image" content="f:/blog/source/img/ternary_003.png">
+<meta property="og:image" content="f:/blog/source/img/ternary_004.png">
+<meta property="og:image" content="f:/blog/source/img/ternary_005.png">
+<meta property="og:image" content="f:/blog/source/img/ternary_006.png">
+<meta property="og:image" content="f:/blog/source/img/ternary_009.png">
+<meta property="og:image" content="f:/blog/source/img/ternary_007.png">
+<meta property="og:image" content="f:/blog/source/img/ternary_008.png">
+<meta property="og:image" content="f:/blog/source/img/ternary_010.png">
+<meta property="og:image" content="f:/blog/source/img/ternary_011.png">
+<meta property="og:image" content="f:/blog/source/img/ternary_012.png">
+<meta property="og:image" content="f:/blog/source/img/ternary_013.png">
+<meta property="og:image" content="f:/blog/source/img/ternary_014.png">
+<meta property="og:image" content="f:/blog/source/img/ternary_015.png">
+<meta property="og:image" content="f:/blog/source/img/ternary_016.png">
+<meta property="og:image" content="f:/blog/source/img/ternary_017.png">
+<meta property="og:image" content="f:/blog/source/img/ternary_018.png">
+<meta property="og:image" content="f:/blog/source/img/ternary_019.png">
+<meta property="og:image" content="f:/blog/source/img/ternary_020.png">
+<meta property="og:updated_time" content="2018-10-26T11:58:39.853Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Learning Symmetric Quantization">
-<meta name="twitter:description" content="“SYQ: Learning Symmetric Quantization For Efficient Deep Neural Networks”这篇文章提出了基于梯度的对称量化（SYQ: Learning Symmetric Quantization）方法，可以设计高效率的二值化或三值化深度网络(1-bit或2-bit权重量化)，并在pixel-wise、row-wise或者layer-wise">
+<meta name="twitter:title" content="三值神经网络">
+<meta name="twitter:description" content="概述就目前而言，深度神经网络的层数和训练时间变得越来越多。一方面，人们想要在处理器上面下功夫，但是处理器的处理速度也十分有限。造成目前一个比较深的神经网络的训练时间有时候往往需要一到两周，基于目前的困难，就有人提出了解决方式。 首先，在神经网络训练的整个训练过程中，最占用时间的无疑是乘法操作。是浮点型数据的乘法尤其消耗计算量，往往需要很多个Clock。那么，如果把所有全连接的权值全部变成1，或者-">
+<meta name="twitter:image" content="f:/blog/source/img/ternary_001.png">
 
 
 
@@ -119,13 +140,13 @@
 
 
 
-  <link rel="canonical" href="https://fanhaoxin.github.io/2018/10/26/SYQ/"/>
+  <link rel="canonical" href="https://fanhaoxin.github.io/2018/10/26/Ternary/"/>
 
 
 
 
 
-  <title>Learning Symmetric Quantization | 学沫要努力毕业！</title>
+  <title>三值神经网络 | 学沫要努力毕业！</title>
   
 
 
@@ -242,7 +263,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://fanhaoxin.github.io/2018/10/26/SYQ/">
+    <link itemprop="mainEntityOfPage" href="https://fanhaoxin.github.io/2018/10/26/Ternary/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="范小沫">
@@ -259,7 +280,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">Learning Symmetric Quantization</h1>
+          <h1 class="post-title" itemprop="name headline">三值神经网络</h1>
         
 
         <div class="post-meta">
@@ -271,7 +292,7 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-10-26T11:24:39+08:00">
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-10-26T16:50:11+08:00">
                 2018-10-26
               </time>
             
@@ -289,7 +310,7 @@
 
           
           
-             <span id="/2018/10/26/SYQ/" class="leancloud_visitors" data-flag-title="Learning Symmetric Quantization">
+             <span id="/2018/10/26/Ternary/" class="leancloud_visitors" data-flag-title="三值神经网络">
                <span class="post-meta-divider">|</span>
                <span class="post-meta-item-icon">
                  <i class="fa fa-eye"></i>
@@ -320,7 +341,62 @@
       
 
       
-        <p>“SYQ: Learning Symmetric Quantization For Efficient Deep Neural Networks”这篇文章提出了基于梯度的对称量化（SYQ: Learning Symmetric Quantization）方法，可以设计高效率的二值化或三值化深度网络(1-bit或2-bit权重量化)，并在pixel-wise、row-wise或者layer-wise定义不同粒度的缩放因子(scaling factor)用来估计网络参数。每一层的激活输出则采用线性量化表示为2-8bits定点数值。</p>
+        <h1 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h1><p>就目前而言，深度神经网络的层数和训练时间变得越来越多。一方面，人们想要在处理器上面下功夫，但是处理器的处理速度也十分有限。造成目前一个比较深的神经网络的训练时间有时候往往需要一到两周，基于目前的困难，就有人提出了解决方式。</p>
+<p>首先，在神经网络训练的整个训练过程中，最占用时间的无疑是乘法操作。是浮点型数据的乘法尤其消耗计算量，往往需要很多个Clock。那么，如果把所有全连接的权值全部变成1，或者-1的话，乘法运算就变成了简单的加减法，这无疑是非常节约计算时间的。目前的权值简化策略大概分为两种，Binary和Ternary。Binary是把权值简化为1和-1，而Ternary是把权值简化为1，-1,0两者的区别是什么呢？Binary在比较简单的库表现比较好比如说MNIST, CIFAR-10，但是在比较复杂的库比如说ImageNet上表现相对于Ternary有差距。</p>
+<h1 id="Ternary-weight-networks"><a href="#Ternary-weight-networks" class="headerlink" title="Ternary weight networks"></a>Ternary weight networks</h1><p>Ternary weight networks(TWN)，它将权重限制为三值：+1，0和-1。TWNs试图在全精度权重网络和二值网络之间取得平衡：</p>
+<ul>
+<li>表达能力</li>
+<li>模型压缩</li>
+<li>计算要求</li>
+</ul>
+<h2 id="三元权重公式"><a href="#三元权重公式" class="headerlink" title="三元权重公式"></a>三元权重公式</h2><p>为了提高三元权值网络的性能，要最小化全精度权值W和三元权值Wt之间的欧氏距离。公式如下：</p>
+<p><img src="F:\blog\source\img\ternary_001.png" alt=""></p>
+<p>其中，n是卷积核的数量，权重估计W≈αWt。三元权值网络的前向传播如下：</p>
+<p><img src="F:\blog\source\img\ternary_002.png" alt=""></p>
+<p>其中，X是输入的矩阵块；×是卷积运算或内积运算；g是非线性激活函数；⨁内积或卷积运算，无任何乘法；Xnext是输出的矩阵块。</p>
+<p><em>三元函数近似解决方案</em></p>
+<p>这个算法的核心是只在前向和后向过程中使用使用权值简化，但是在参数更新仍然是使用连续的权值。 </p>
+<p>简单的说就是先利用公式计算出三值网络中的阈值： </p>
+<p><img src="F:\blog\source\img\ternary_003.png" alt=""></p>
+<p>即将每一层的权值绝对值求平均值乘以0.7算出一个Δ作为三值网络离散权值的阈值，具体的离散过程如下：</p>
+<p><img src="F:\blog\source\img\ternary_004.png" alt=""></p>
+<p>到此，就可以从连续的权重值变成离散的(-1, 0, +1)。</p>
+<p>为了提高离散准确率，增加一个参数α，该参数计算方式如下：</p>
+<p><img src="F:\blog\source\img\ternary_005.png" alt=""></p>
+<p>|IΔ|这个参数指的是权值的绝对值大于Δ的权值个数，计算出这个参数我们就可以简化前向计算了，具体简化过程如下： </p>
+<p><img src="F:\blog\source\img\ternary_006.png" alt=""></p>
+<p>根据前面的公式可以看出，α可以乘到前面，将复杂的乘法运算变成简单的加法运算，从而加快整个的训练速度。</p>
+<h2 id="算法流程"><a href="#算法流程" class="headerlink" title="算法流程"></a>算法流程</h2><p>三值神经网络的具体的实现，算法见下图：</p>
+<p><img src="F:\blog\source\img\ternary_009.png" alt=""></p>
+<p>这个算法的核心是只在前向和后向过程中使用使用权值简化，但是在update是仍然是使用连续的权值。</p>
+<h2 id="SGD训练"><a href="#SGD训练" class="headerlink" title="SGD训练"></a>SGD训练</h2><p>我们使用随机梯度下降（SGD）方法来训练TWN。 我们在前向传播和反向传播期间使用三值权重，但不在参数更新期间使用。 此外，还采用了两个有用的技巧：批量标准化和学习率衰减。 我们也使用动量。</p>
+<h2 id="模型压缩和运行时间"><a href="#模型压缩和运行时间" class="headerlink" title="模型压缩和运行时间"></a>模型压缩和运行时间</h2><p>运行时达到16倍或32倍模型压缩率。</p>
+<h2 id="实验结果"><a href="#实验结果" class="headerlink" title="实验结果"></a>实验结果</h2><p><img src="F:\blog\source\img\ternary_007.png" alt=""></p>
+<p><img src="F:\blog\source\img\ternary_008.png" alt=""></p>
+<p>可以看到，其实三值网络在ImageNet这种库上面，虽然效果好于二值网络但是还是不够准确，实际的工作中我们可以考虑在准确率到达一定程度后，再去使用简化权值网络达到加快训练时间同时保护识别精度的效果。</p>
+<h1 id="Trained-Ternary-Quantization"><a href="#Trained-Ternary-Quantization" class="headerlink" title="Trained Ternary Quantization"></a>Trained Ternary Quantization</h1><p>Trained Ternary Quantization(TTQ)，量化浮点权重到三值权重，在开源数据集上相比浮点性能下降很少。</p>
+<p>在之前的量化算法中，是通过一个尺度因子和三值权重相乘来拟合浮点权重，像在TWN中给出了经验公式来计算尺度因子α，本文提出了通过<em>梯度下降</em>对α进行更新。</p>
+<p>对于每一层网络，三个值是32bit浮点的{−Wln,0,Wlp}，Wln、Wpl是可训练的参数。另外32bit浮点的模型也是训练的对象，但是阈值Δl是不可训练的。 </p>
+<p>首先将浮点权重除以最大值后正则化到正负1之间，所有的层有一个相同的参数t，用来计算阈值进行量化，阈值计算如下：</p>
+<p><img src="F:\blog\source\img\ternary_010.png" alt=""></p>
+<p>从32bit浮点的到量化的三值：</p>
+<p><img src="F:\blog\source\img\ternary_011.png" alt=""></p>
+<p>Wnl、Wpl的梯度：</p>
+<p><img src="F:\blog\source\img\ternary_012.png" alt=""></p>
+<p>其中，</p>
+<p><img src="F:\blog\source\img\ternary_013.png" alt=""></p>
+<p>算出32bit浮点模型的梯度：</p>
+<p><img src="F:\blog\source\img\ternary_014.png" alt=""></p>
+<h2 id="算法流程-1"><a href="#算法流程-1" class="headerlink" title="算法流程"></a>算法流程</h2><p><img src="F:\blog\source\img\ternary_015.png" alt=""></p>
+<h2 id="实验结果-1"><a href="#实验结果-1" class="headerlink" title="实验结果"></a>实验结果</h2><p>这种方法在CIFAR-10的实验中使用阈值t=0.05。而在ImageNet的实验中，并不是由通过钦定阈值的方式进行量化的划分，而是钦定0值的比率r，即稀疏度。 </p>
+<h3 id="ResNets-on-CIFAR-10"><a href="#ResNets-on-CIFAR-10" class="headerlink" title="ResNets on CIFAR-10"></a>ResNets on CIFAR-10</h3><p><img src="F:\blog\source\img\ternary_016.png" alt=""></p>
+<h3 id="AlexNet-on-ImageNet"><a href="#AlexNet-on-ImageNet" class="headerlink" title="AlexNet on ImageNet"></a>AlexNet on ImageNet</h3><p>第一层卷积和最后一层FC用的32bit浮点权重，其它用的三值权重。 </p>
+<p><img src="F:\blog\source\img\ternary_017.png" alt=""></p>
+<h3 id="ResNet-18-on-ImageNet"><a href="#ResNet-18-on-ImageNet" class="headerlink" title="ResNet-18 on ImageNet"></a>ResNet-18 on ImageNet</h3><p><img src="F:\blog\source\img\ternary_018.png" alt=""></p>
+<h1 id="讨论"><a href="#讨论" class="headerlink" title="讨论"></a>讨论</h1><p>稀疏度为0（即二值网络）不好，稀疏度太大也不好，30%~50%最好，如Figure 5。用阈值t比稀疏度r更好，这样各层可以找到自己合适的稀疏度。 </p>
+<p><img src="F:\blog\source\img\ternary_019.png" alt=""></p>
+<p>最后看一下三值的AlexNet的卷积核 </p>
+<p><img src="F:\blog\source\img\ternary_020.png" alt=""></p>
 
       
     </div>
@@ -345,8 +421,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2018/10/11/hello-world/" rel="next" title="Hello World">
-                <i class="fa fa-chevron-left"></i> Hello World
+              <a href="/2018/10/26/selu/" rel="next" title="Self-Normalizing Neural Networks(自归一化神经网络）">
+                <i class="fa fa-chevron-left"></i> Self-Normalizing Neural Networks(自归一化神经网络）
               </a>
             
           </div>
@@ -354,10 +430,6 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2018/10/26/selu/" rel="prev" title="Self-Normalizing Neural Networks(自归一化神经网络）">
-                Self-Normalizing Neural Networks(自归一化神经网络） <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -409,8 +481,17 @@
       
 
       
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
 
-      <section class="site-overview-wrap sidebar-panel sidebar-panel-active">
+      <section class="site-overview-wrap sidebar-panel">
         <div class="site-overview">
           <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
             
@@ -452,6 +533,22 @@
         </div>
       </section>
 
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#概述"><span class="nav-number">1.</span> <span class="nav-text">概述</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Ternary-weight-networks"><span class="nav-number">2.</span> <span class="nav-text">Ternary weight networks</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#三元权重公式"><span class="nav-number">2.1.</span> <span class="nav-text">三元权重公式</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#算法流程"><span class="nav-number">2.2.</span> <span class="nav-text">算法流程</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#SGD训练"><span class="nav-number">2.3.</span> <span class="nav-text">SGD训练</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#模型压缩和运行时间"><span class="nav-number">2.4.</span> <span class="nav-text">模型压缩和运行时间</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#实验结果"><span class="nav-number">2.5.</span> <span class="nav-text">实验结果</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Trained-Ternary-Quantization"><span class="nav-number">3.</span> <span class="nav-text">Trained Ternary Quantization</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#算法流程-1"><span class="nav-number">3.1.</span> <span class="nav-text">算法流程</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#实验结果-1"><span class="nav-number">3.2.</span> <span class="nav-text">实验结果</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#ResNets-on-CIFAR-10"><span class="nav-number">3.2.1.</span> <span class="nav-text">ResNets on CIFAR-10</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#AlexNet-on-ImageNet"><span class="nav-number">3.2.2.</span> <span class="nav-text">AlexNet on ImageNet</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#ResNet-18-on-ImageNet"><span class="nav-number">3.2.3.</span> <span class="nav-text">ResNet-18 on ImageNet</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#讨论"><span class="nav-number">4.</span> <span class="nav-text">讨论</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
       
 
       

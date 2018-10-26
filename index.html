@@ -242,6 +242,192 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://fanhaoxin.github.io/2018/10/26/Ternary/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="范小沫">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="学沫要努力毕业！">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2018/10/26/Ternary/" itemprop="url">三值神经网络</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-10-26T16:50:11+08:00">
+                2018-10-26
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+             <span id="/2018/10/26/Ternary/" class="leancloud_visitors" data-flag-title="三值神经网络">
+               <span class="post-meta-divider">|</span>
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               
+                 <span class="post-meta-item-text">阅读次数&#58;</span>
+               
+                 <span class="leancloud-visitors-count"></span>
+             </span>
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h1 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h1><p>就目前而言，深度神经网络的层数和训练时间变得越来越多。一方面，人们想要在处理器上面下功夫，但是处理器的处理速度也十分有限。造成目前一个比较深的神经网络的训练时间有时候往往需要一到两周，基于目前的困难，就有人提出了解决方式。</p>
+<p>首先，在神经网络训练的整个训练过程中，最占用时间的无疑是乘法操作。是浮点型数据的乘法尤其消耗计算量，往往需要很多个Clock。那么，如果把所有全连接的权值全部变成1，或者-1的话，乘法运算就变成了简单的加减法，这无疑是非常节约计算时间的。目前的权值简化策略大概分为两种，Binary和Ternary。Binary是把权值简化为1和-1，而Ternary是把权值简化为1，-1,0两者的区别是什么呢？Binary在比较简单的库表现比较好比如说MNIST, CIFAR-10，但是在比较复杂的库比如说ImageNet上表现相对于Ternary有差距。</p>
+<h1 id="Ternary-weight-networks"><a href="#Ternary-weight-networks" class="headerlink" title="Ternary weight networks"></a>Ternary weight networks</h1><p>Ternary weight networks(TWN)，它将权重限制为三值：+1，0和-1。TWNs试图在全精度权重网络和二值网络之间取得平衡：</p>
+<ul>
+<li>表达能力</li>
+<li>模型压缩</li>
+<li>计算要求</li>
+</ul>
+<h2 id="三元权重公式"><a href="#三元权重公式" class="headerlink" title="三元权重公式"></a>三元权重公式</h2><p>为了提高三元权值网络的性能，要最小化全精度权值W和三元权值Wt之间的欧氏距离。公式如下：</p>
+<p><img src="F:\blog\source\img\ternary_001.png" alt=""></p>
+<p>其中，n是卷积核的数量，权重估计W≈αWt。三元权值网络的前向传播如下：</p>
+<p><img src="F:\blog\source\img\ternary_002.png" alt=""></p>
+<p>其中，X是输入的矩阵块；×是卷积运算或内积运算；g是非线性激活函数；⨁内积或卷积运算，无任何乘法；Xnext是输出的矩阵块。</p>
+<p><em>三元函数近似解决方案</em></p>
+<p>这个算法的核心是只在前向和后向过程中使用使用权值简化，但是在参数更新仍然是使用连续的权值。 </p>
+<p>简单的说就是先利用公式计算出三值网络中的阈值： </p>
+<p><img src="F:\blog\source\img\ternary_003.png" alt=""></p>
+<p>即将每一层的权值绝对值求平均值乘以0.7算出一个Δ作为三值网络离散权值的阈值，具体的离散过程如下：</p>
+<p><img src="F:\blog\source\img\ternary_004.png" alt=""></p>
+<p>到此，就可以从连续的权重值变成离散的(-1, 0, +1)。</p>
+<p>为了提高离散准确率，增加一个参数α，该参数计算方式如下：</p>
+<p><img src="F:\blog\source\img\ternary_005.png" alt=""></p>
+<p>|IΔ|这个参数指的是权值的绝对值大于Δ的权值个数，计算出这个参数我们就可以简化前向计算了，具体简化过程如下： </p>
+<p><img src="F:\blog\source\img\ternary_006.png" alt=""></p>
+<p>根据前面的公式可以看出，α可以乘到前面，将复杂的乘法运算变成简单的加法运算，从而加快整个的训练速度。</p>
+<h2 id="算法流程"><a href="#算法流程" class="headerlink" title="算法流程"></a>算法流程</h2><p>三值神经网络的具体的实现，算法见下图：</p>
+<p><img src="F:\blog\source\img\ternary_009.png" alt=""></p>
+<p>这个算法的核心是只在前向和后向过程中使用使用权值简化，但是在update是仍然是使用连续的权值。</p>
+<h2 id="SGD训练"><a href="#SGD训练" class="headerlink" title="SGD训练"></a>SGD训练</h2><p>我们使用随机梯度下降（SGD）方法来训练TWN。 我们在前向传播和反向传播期间使用三值权重，但不在参数更新期间使用。 此外，还采用了两个有用的技巧：批量标准化和学习率衰减。 我们也使用动量。</p>
+<h2 id="模型压缩和运行时间"><a href="#模型压缩和运行时间" class="headerlink" title="模型压缩和运行时间"></a>模型压缩和运行时间</h2><p>运行时达到16倍或32倍模型压缩率。</p>
+<h2 id="实验结果"><a href="#实验结果" class="headerlink" title="实验结果"></a>实验结果</h2><p><img src="F:\blog\source\img\ternary_007.png" alt=""></p>
+<p><img src="F:\blog\source\img\ternary_008.png" alt=""></p>
+<p>可以看到，其实三值网络在ImageNet这种库上面，虽然效果好于二值网络但是还是不够准确，实际的工作中我们可以考虑在准确率到达一定程度后，再去使用简化权值网络达到加快训练时间同时保护识别精度的效果。</p>
+<h1 id="Trained-Ternary-Quantization"><a href="#Trained-Ternary-Quantization" class="headerlink" title="Trained Ternary Quantization"></a>Trained Ternary Quantization</h1><p>Trained Ternary Quantization(TTQ)，量化浮点权重到三值权重，在开源数据集上相比浮点性能下降很少。</p>
+<p>在之前的量化算法中，是通过一个尺度因子和三值权重相乘来拟合浮点权重，像在TWN中给出了经验公式来计算尺度因子α，本文提出了通过<em>梯度下降</em>对α进行更新。</p>
+<p>对于每一层网络，三个值是32bit浮点的{−Wln,0,Wlp}，Wln、Wpl是可训练的参数。另外32bit浮点的模型也是训练的对象，但是阈值Δl是不可训练的。 </p>
+<p>首先将浮点权重除以最大值后正则化到正负1之间，所有的层有一个相同的参数t，用来计算阈值进行量化，阈值计算如下：</p>
+<p><img src="F:\blog\source\img\ternary_010.png" alt=""></p>
+<p>从32bit浮点的到量化的三值：</p>
+<p><img src="F:\blog\source\img\ternary_011.png" alt=""></p>
+<p>Wnl、Wpl的梯度：</p>
+<p><img src="F:\blog\source\img\ternary_012.png" alt=""></p>
+<p>其中，</p>
+<p><img src="F:\blog\source\img\ternary_013.png" alt=""></p>
+<p>算出32bit浮点模型的梯度：</p>
+<p><img src="F:\blog\source\img\ternary_014.png" alt=""></p>
+<h2 id="算法流程-1"><a href="#算法流程-1" class="headerlink" title="算法流程"></a>算法流程</h2><p><img src="F:\blog\source\img\ternary_015.png" alt=""></p>
+<h2 id="实验结果-1"><a href="#实验结果-1" class="headerlink" title="实验结果"></a>实验结果</h2><p>这种方法在CIFAR-10的实验中使用阈值t=0.05。而在ImageNet的实验中，并不是由通过钦定阈值的方式进行量化的划分，而是钦定0值的比率r，即稀疏度。 </p>
+<h3 id="ResNets-on-CIFAR-10"><a href="#ResNets-on-CIFAR-10" class="headerlink" title="ResNets on CIFAR-10"></a>ResNets on CIFAR-10</h3><p><img src="F:\blog\source\img\ternary_016.png" alt=""></p>
+<h3 id="AlexNet-on-ImageNet"><a href="#AlexNet-on-ImageNet" class="headerlink" title="AlexNet on ImageNet"></a>AlexNet on ImageNet</h3><p>第一层卷积和最后一层FC用的32bit浮点权重，其它用的三值权重。 </p>
+<p><img src="F:\blog\source\img\ternary_017.png" alt=""></p>
+<h3 id="ResNet-18-on-ImageNet"><a href="#ResNet-18-on-ImageNet" class="headerlink" title="ResNet-18 on ImageNet"></a>ResNet-18 on ImageNet</h3><p><img src="F:\blog\source\img\ternary_018.png" alt=""></p>
+<h1 id="讨论"><a href="#讨论" class="headerlink" title="讨论"></a>讨论</h1><p>稀疏度为0（即二值网络）不好，稀疏度太大也不好，30%~50%最好，如Figure 5。用阈值t比稀疏度r更好，这样各层可以找到自己合适的稀疏度。 </p>
+<p><img src="F:\blog\source\img\ternary_019.png" alt=""></p>
+<p>最后看一下三值的AlexNet的卷积核 </p>
+<p><img src="F:\blog\source\img\ternary_020.png" alt=""></p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="https://fanhaoxin.github.io/2018/10/26/selu/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -746,7 +932,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">3</span>
+                  <span class="site-state-item-count">4</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -811,6 +997,26 @@
 
 
         
+<div class="busuanzi-count">
+  <script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+  
+    <span class="site-uv">
+      <i class="fa fa-user"></i>
+      <span class="busuanzi-value" id="busuanzi_value_site_uv"></span>
+      
+    </span>
+  
+
+  
+    <span class="site-pv">
+      <i class="fa fa-eye"></i>
+      <span class="busuanzi-value" id="busuanzi_value_site_pv"></span>
+      
+    </span>
+  
+</div>
+
 
 
 
@@ -852,6 +1058,8 @@
   
 
 
+  
+
 
 
 
@@ -890,6 +1098,11 @@
   
   
     <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/canvas-nest/canvas-nest.min.js"></script>
   
 
 
